@@ -1,0 +1,13 @@
+# Use the official Python 3.13 image (Ubuntu-based or alpine-based)
+FROM docker.io/python:3.13-slim
+
+# Set the working directory inside the container
+WORKDIR /workspace/
+
+# Install system dependencies (if needed, e.g., for building Python packages)
+RUN apt-get update && \
+    apt-get install -y \
+    build-essential \
+    libssl-dev \
+    libffi-dev \
+    && apt-get clean
