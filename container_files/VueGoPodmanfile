@@ -6,7 +6,7 @@ FROM mcr.microsoft.com/devcontainers/base:ubuntu
 # ----------------------
 ENV DEBIAN_FRONTEND=noninteractive
 ENV GO_VERSION=1.24.3
-ENV NODE_VERSION=22.16.0
+ENV NODE_VERSION=22
 
 # ----------------------
 # 2. INSTALL SYSTEM DEPS
