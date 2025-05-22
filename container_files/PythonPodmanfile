@@ -10,4 +10,7 @@ RUN apt-get update && \
     build-essential \
     libssl-dev \
     libffi-dev \
+    wget \
+    curl && \
+    curl -fsSL https://code-server.dev/install.sh | sh
     && apt-get clean

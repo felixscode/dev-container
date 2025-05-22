@@ -1,0 +1,57 @@
+# Use a lean Ubuntu base with common dev tools
+FROM mcr.microsoft.com/devcontainers/base:ubuntu
+
+# ----------------------
+# 1. ENVIRONMENT VARS
+# ----------------------
+ENV DEBIAN_FRONTEND=noninteractive
+ENV GO_VERSION=1.24.3
+ENV NODE_VERSION=22.16.0
+
+# ----------------------
+# 2. INSTALL SYSTEM DEPS
+# ----------------------
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends \
+       build-essential \
+       ca-certificates \
+       curl \
+       git \
+       unzip \
+       wget \
+    && rm -rf /var/lib/apt/lists/*
+
+# ----------------------
+# 3. INSTALL Go
+# ----------------------
+RUN wget https://golang.org/dl/go${GO_VERSION}.linux-amd64.tar.gz -O /tmp/go.tar.gz \
+    && tar -C /usr/local -xzf /tmp/go.tar.gz \
+    && rm /tmp/go.tar.gz
+
+ENV PATH="/usr/local/go/bin:${PATH}"
+# Optional: set GOPATH inside workspace
+ENV GOPATH="/workspace/go"
+ENV PATH="${GOPATH}/bin:${PATH}"
+
+# ----------------------
+# 4. INSTALL Node.js & npm
+# ----------------------
+RUN curl -fsSL https://deb.nodesource.com/setup_${NODE_VERSION}.x | bash - \
+    && apt-get update \
+    && apt-get install -y nodejs \
+    && rm -rf /var/lib/apt/lists/*
+
+RUN npm install -g @anthropic-ai/claude-code
+# ----------------------
+# 6. PORTS
+# ----------------------
+# Vue default dev server
+EXPOSE 5173
+# Go API
+EXPOSE 8080
+
+# ----------------------
+# 7. ENTRYPOINT
+# ----------------------
+# By default, drop into a bash shell
+CMD [ "bash" ]

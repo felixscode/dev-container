@@ -9,6 +9,7 @@ services:
     command: ["sh", "-c", "pip install -e /workspace/ && exec bash"]  # Adjust the entry point of your app
     stdin_open: true
     tty: true  # Needed for interactive containers
+
   jobshoplab:
     container_name: jobshoplab-development-container
     build:
@@ -19,6 +20,7 @@ services:
     command: ["sh", "-c", "pip install -e /workspace/[dev] && exec bash"]  # Adjust the entry point of your app
     stdin_open: true
     tty: true  # Needed for interactive containers
+    
   opti_pipe:
     container_name: opti_pipe-development-container
     build:
@@ -27,5 +29,16 @@ services:
     volumes:
       - ../opti_pipe:/workspace/ # Correct path to your project
     command: ["sh", "-c", "exec bash"]  # Adjust the entry point of your app
+    stdin_open: true
+    tty: true  # Needed for interactive containers
+
+  map-app:
+    container_name: map-app-development-container
+    build:
+      context: .   # The directory with the Podmanfile
+      dockerfile: ./container_files/VueGoPodmanfile   # Path to the Podmanfile (or Dockerfile)
+    volumes:
+      - ../map-app:/workspace/ # Correct path to your project
+    command: ["sh"]
     stdin_open: true
     tty: true  # Needed for interactive containers
