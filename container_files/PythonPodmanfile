@@ -4,13 +4,27 @@ FROM docker.io/python:3.13-slim
 # Set the working directory inside the container
 WORKDIR /workspace/
 
-# Install system dependencies (if needed, e.g., for building Python packages)
+# Install system dependencies and Node.js for claude-code
 RUN apt-get update && \
     apt-get install -y \
     build-essential \
     libssl-dev \
     libffi-dev \
     wget \
-    curl && \
-    curl -fsSL https://code-server.dev/install.sh | sh
-    && apt-get clean
+    curl \
+    gnupg && \
+    curl -fsSL https://deb.nodesource.com/setup_20.x | bash - && \
+    apt-get install -y nodejs && \
+    curl -fsSL https://code-server.dev/install.sh | sh && \
+    npm install -g @anthropic-ai/claude-code && \
+    apt-get clean
+
+# ----------------------
+# 7. ENTRYPOINT
+# ----------------------
+# By default, drop into a bash shell
+ARG USERNAME=vscode
+ARG USER_UID=1000
+ARG USER_GID=1000
+RUN usermod -u ${USER_UID} ${USERNAME} \
+    && groupmod -g ${USER_GID} ${USERNAME}
